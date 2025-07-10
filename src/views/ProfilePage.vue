@@ -4,10 +4,14 @@
     <aside class="profile-tabs">
       <ul>
         <li></li>
-        <li class="active">Basic Details</li>
-        <li>Additional Details</li>
-        <li>Spouse Details</li>
-        <li>Personal Preferences</li>
+        <li
+          v-for="(tab, index) in tabs"
+          :key="index"
+          :class="{ active: activeTab === index }"
+          @click="activeTab = index"
+        >
+          {{ tab }}
+        </li>
       </ul>
     </aside>
 
@@ -17,27 +21,18 @@
         <h1>My <strong>Profile</strong></h1>
         <div class="line"></div>
       </div>
-      <!-- <h1 class="profile-title">My <strong>Profile</strong></h1><div class="underline"></div> -->
 
       <div class="profile-content-wrapper">
         <div class="avatar"></div>
         <div class="profile-content">
           <div class="profile-content-body">
-            <div class="field">
-              <label>Salutation*</label>
-              <p>Mr.</p>
-            </div>
-            <div class="field">
-              <label>First name*</label>
-              <p>John</p>
-            </div>
-            <div class="field">
-              <label>Last name*</label>
-              <p>Doe Jr.</p>
-            </div>
-            <div class="field">
-              <label>Email address*</label>
-              <p>johndoe@anyemail.com</p>
+            <div
+              class="field"
+              v-for="(field, idx) in tabContents[activeTab]"
+              :key="idx"
+            >
+              <label>{{ `${field.label}${field.isMandatory ? '*' : ''}` }}</label>
+              <p>{{ field.value || '-' }}</p>
             </div>
           </div>
         </div>
@@ -138,8 +133,10 @@
 .avatar {
   width: 100px;
   height: 100px;
-  background: #444;
   border-radius: 50%;
+  background-image: url('@/assets/avatar.png');
+  background-size: cover;
+  background-position: center;
 }
 
 .field {
@@ -216,3 +213,49 @@
   }
 }
 </style>
+
+<script setup>
+import { ref } from 'vue'
+
+const tabs = [
+  'Basic Details',
+  'Additional Details',
+  'Spouse Details',
+  'Personal Preferences'
+]
+
+const activeTab = ref(0)
+
+const tabContents = [
+  // Basic Details
+  [
+    { label: 'Salutation', value: 'Mr.', isMandatory: true },
+    { label: 'First name', value: 'John', isMandatory: true },
+    { label: 'Last name', value: 'Doe Jr.', isMandatory: true },
+    { label: 'Email address', value: 'johndoe@anyemail.com', isMandatory: true }
+  ],
+  // Additional Details
+  [
+    { label: 'Home Address', value: 'Jl Adhiyaksa', isMandatory: true },
+    { label: 'Country', value: 'Indonesia', isMandatory: true },
+    { label: 'Postal Code', value: '45192', isMandatory: true },
+    { label: 'Date of Birth', value: '16/05/1994', },
+    { label: 'Gender', value: 'male' },
+    { label: 'Martial Status', value: 'single' }
+  ],
+  // Spouse Details
+  [
+    { label: 'Spouse First Name', value: '' },
+    { label: 'Spouse Last Name', value: '' },
+    { label: 'Spouse Solution', value: '' }
+  ],
+  // Personal Preferences
+  [
+    { label: 'Hobbies and Interests', value: '' },
+    { label: 'Favorite Sport(s)', value: '' },
+    { label: 'Preferred Music(s)', value: '' },
+    { label: 'Preferred Movie(S)', value: '' }
+  ]
+]
+
+</script>

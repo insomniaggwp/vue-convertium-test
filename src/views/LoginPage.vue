@@ -38,7 +38,9 @@ import { RouterLink } from 'vue-router'
 import ErrorTooltip from '@/components/ErrorTooltip.vue'
 import Cookies from 'js-cookie'
 import { useRouter } from 'vue-router'
+import { useAuth } from '@/composables/auth'
 
+const { updateLoginState } = useAuth()
 const router = useRouter()
 
 const loginFormRef = ref(null)
@@ -92,6 +94,7 @@ async function handleLogin() {
   // ✅ Login success
   localStorage.setItem('user', JSON.stringify(user));
   Cookies.set('user_id', user.id, keepLoggedIn.value? { expires: 365 } : undefined);
+  updateLoginState();
   router.push('/profile');
 }
 

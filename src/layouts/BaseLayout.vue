@@ -2,16 +2,20 @@
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 import Cookies from 'js-cookie'
+import { useAuth } from '@/composables/auth'
 
 const router = useRouter()
 const showMenu = ref(false)
+const { isLoggedIn, updateLoginState } = useAuth()
 
 function toggleMenu() {
   showMenu.value = !showMenu.value
 }
 
 function handleLogout() {
+  showMenu.value = false;
   Cookies.remove('user_id')
+  updateLoginState()
   router.push('/')
 }
 </script>
@@ -24,13 +28,13 @@ function handleLogout() {
       <div class="logo-box">
         <h1 class="logo-text"><strong>LOGO</strong></h1>
       </div>
-      <button class="hamburger" @click="toggleMenu">☰</button>
+      <button v-if="isLoggedIn" class="hamburger" @click="toggleMenu">☰</button>
     </header>
 
     <transition name="slide-fade">
       <div v-if="showMenu" class="navigation-menu">
         <button class="close-button" @click="toggleMenu">X</button>
-        <RouterLink to="/" @click="toggleMenu">Home</RouterLink>
+        <RouterLink to="/home" @click="toggleMenu">Home</RouterLink>
         <RouterLink to="/profile" @click="toggleMenu">My Profile</RouterLink>
         <RouterLink to="/profile" @click="toggleMenu">Edit Profile</RouterLink>
         <button class="logout-button" @click="handleLogout">Logout</button>
