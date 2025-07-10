@@ -58,6 +58,12 @@ function goToDashboard() {
   flex-direction: column;
 }
 
+button {
+  all: unset;
+  cursor: pointer;
+  font: inherit;
+}
+
 .header {
   position: fixed;
   top: 0;

@@ -1,7 +1,10 @@
 <template>
-  <div class="error-tooltip">
-    <em>{{ message }}</em>
-  </div>
+  <transition
+    enter-active-class="fade-in"
+    leave-active-class="fade-out"
+  >
+    <div v-if="visible" class="error-tooltip">{{ message }}</div>
+  </transition>
 </template>
 
 <style scoped>
@@ -23,7 +26,7 @@
   transition: opacity 0.3s ease;
   font-style: italic;
   box-shadow: 0 2px 6px rgba(0,0,0,0.2);
-  animation: slide-up-fade 0.5s ease forwards;
+  /* animation: slide-up-fade 0.5s ease forwards; */
 }
 
 /* Optional: triangle arrow */
@@ -38,6 +41,14 @@
   border-color: transparent transparent #f44336 transparent;
 }
 
+.fade-in {
+  animation: slide-up-fade 0.5s ease forwards;
+}
+
+.fade-out {
+  animation: slide-down-fade 0.5s ease forwards;
+}
+
 /* Animation */
 @keyframes slide-up-fade {
   0% {
@@ -50,8 +61,19 @@
   }
 }
 
+@keyframes slide-down-fade {
+  0% {
+    opacity: 1;
+    transform: translate(-50%, 0);
+  }
+  100% {
+    opacity: 0;
+    transform: translate(-50%, 10px);
+  }
+}
+
 </style>
 
 <script setup>
-  defineProps({ message: String})
+  defineProps({ message: String, visible: Boolean })
 </script>

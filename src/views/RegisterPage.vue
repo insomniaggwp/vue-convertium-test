@@ -33,7 +33,7 @@
       </p>
     </form>
 
-    <ErrorTooltip v-if="error !== ''" :message="error" />
+    <ErrorTooltip :visible="error !== ''" :message="error" />
   </AuthLayout>
 </template>
 
