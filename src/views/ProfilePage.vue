@@ -23,7 +23,10 @@
       </div>
 
       <div class="profile-content-wrapper">
-        <div class="avatar"></div>
+        <!-- <div class="avatar"></div> -->
+         <div class="avatar-wrapper">
+          <img :src="avatarPreview" alt="Avatar" class="avatar-img" />
+        </div>
         <div class="profile-content-card">
           <div
             class="field"
@@ -40,7 +43,7 @@
     <!-- Edit Button -->
      <div class="profile-right">
       <div class="edit-button">
-        <button>Edit profile ✎</button>
+        <RouterLink to="/edit-profile">Edit profile ✎</RouterLink>
       </div>
     </div>
   </div>
@@ -129,17 +132,23 @@
   background: rgba(255, 255, 255, 0.8);
   border-radius: 10px;
   padding: 1.5rem;
-  backdrop-filter: blur(10px); /* Optional: bikin efek "frosted glass" */
+  backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
 }
 
-.avatar {
-  width: 100px;
-  height: 100px;
+.avatar-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.avatar-img {
+  width: 120px;
+  height: 120px;
+  object-fit: cover;
   border-radius: 50%;
-  background-image: url('@/assets/avatar.png');
-  background-size: cover;
-  background-position: center;
+  border: 2px solid #ccc;
 }
 
 .field {
@@ -153,7 +162,6 @@
 
 .field p {
   margin: 0.25rem 0 0 0;
-
 }
 
 .profile-right {
@@ -164,9 +172,6 @@
 .edit-button {
   display: flex;
   padding-top: 1rem;
-}
-
-.edit-button button {
   background: none;
   border: none;
   font-weight: bold;
@@ -221,14 +226,17 @@
 
 <script setup>
 import { ref, onMounted, computed } from 'vue'
+import defaultAvatar from '@/assets/avatar.png'
 
 const user = ref(null)
 const activeTab = ref(0)
+const avatarPreview = ref('')
 
 onMounted(() => {
   const storedUser = localStorage.getItem('user')
   if (storedUser) {
     user.value = JSON.parse(storedUser)
+    avatarPreview.value = user.value.avatar || defaultAvatar
   }
 })
 
