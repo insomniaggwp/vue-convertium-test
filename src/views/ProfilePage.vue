@@ -31,7 +31,7 @@
             :key="idx"
           >
             <label>{{ `${field.label}${field.isMandatory ? '*' : ''}` }}</label>
-            <p>{{ field.value || '-' }}</p>
+            <p>{{ field.value() || '-' }}</p>
           </div>
         </div>
       </div>
@@ -220,47 +220,72 @@
 </style>
 
 <script setup>
-import { ref } from 'vue'
+import { ref, onMounted, computed } from 'vue'
 
-const tabs = [
+const user = ref(null)
+const activeTab = ref(0)
+
+onMounted(() => {
+  const storedUser = localStorage.getItem('user')
+  if (storedUser) {
+    user.value = JSON.parse(storedUser)
+  }
+})
+
+const allTabContents = computed(() => [
+  // Basic Details
+  [
+    { label: 'Salutation', value: () => user.value?.salutation, isMandatory: true },
+    { label: 'First name', value: () => user.value?.firstName, isMandatory: true },
+    { label: 'Last name', value: () => user.value?.lastName, isMandatory: true },
+    { label: 'Email address', value: () => user.value?.email, isMandatory: true }
+  ],
+  // Additional Details
+  [
+    { label: 'Home Address', value: () => user.value?.address, isMandatory: true },
+    { label: 'Country', value: () => user.value?.country, isMandatory: true },
+    { label: 'Postal Code', value: () => user.value?.postalCode, isMandatory: true },
+    { label: 'Date of Birth', value: () => user.value?.dob },
+    { label: 'Gender', value: () => user.value?.gender },
+    { label: 'Martial Status', value: () => user.value?.martialStatus }
+  ],
+  // Spouse Details
+  [
+    { label: 'Spouse First Name', value: () => user.value?.spouseFirtsName },
+    { label: 'Spouse Last Name', value: () => user.value?.spouseLastName },
+    { label: 'Spouse Solution', value: () => user.value?.spouseSolution }
+  ],
+  // Personal Preferences
+  [
+    { label: 'Hobbies and Interests', value: () => user.value?.hobbies },
+    { label: 'Favorite Sport(s)', value: () => user.value?.favoriteSport },
+    { label: 'Preferred Music(s)', value: () => user.value?.preferedMusic },
+    { label: 'Preferred Movie(S)', value: () => user.value?.preferedMovie }
+  ]
+])
+
+
+const allTabs = [
   'Basic Details',
   'Additional Details',
   'Spouse Details',
   'Personal Preferences'
 ]
 
-const activeTab = ref(0)
+const tabs = computed(() => {
+  return allTabs.filter(tab => {
+    if (tab === 'Spouse Details') {
+      return user.value?.martialStatus === 'married'
+    }
+    return true
+  })
+})
 
-const tabContents = [
-  // Basic Details
-  [
-    { label: 'Salutation', value: 'Mr.', isMandatory: true },
-    { label: 'First name', value: 'John', isMandatory: true },
-    { label: 'Last name', value: 'Doe Jr.', isMandatory: true },
-    { label: 'Email address', value: 'johndoe@anyemail.com', isMandatory: true }
-  ],
-  // Additional Details
-  [
-    { label: 'Home Address', value: 'Jl Adhiyaksa', isMandatory: true },
-    { label: 'Country', value: 'Indonesia', isMandatory: true },
-    { label: 'Postal Code', value: '45192', isMandatory: true },
-    { label: 'Date of Birth', value: '16/05/1994', },
-    { label: 'Gender', value: 'male' },
-    { label: 'Martial Status', value: 'single' }
-  ],
-  // Spouse Details
-  [
-    { label: 'Spouse First Name', value: '' },
-    { label: 'Spouse Last Name', value: '' },
-    { label: 'Spouse Solution', value: '' }
-  ],
-  // Personal Preferences
-  [
-    { label: 'Hobbies and Interests', value: '' },
-    { label: 'Favorite Sport(s)', value: '' },
-    { label: 'Preferred Music(s)', value: '' },
-    { label: 'Preferred Movie(S)', value: '' }
-  ]
-]
-
+const tabContents = computed(() => {
+  if (user.value?.martialStatus === 'married') {
+    return allTabContents.value
+  } else {
+    return [...allTabContents.value.slice(0, 2), ...allTabContents.value.slice(3)]
+  }
+})
 </script>
