@@ -60,7 +60,7 @@ const validateForm = () => {
 // Re-validate on input changes
 watch([userId, password, confirmPassword], validateForm)
 
-// Auto-clear error after 5 seconds
+// Auto-clear error after 3 seconds
 watch(error, (newVal) => {
   if (newVal) {
     setTimeout(() => {

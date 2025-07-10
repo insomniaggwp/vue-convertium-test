@@ -1,6 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import LoginPage from '@/views/LoginPage.vue'
 import RegisterPage from '@/views/RegisterPage.vue'
+import Cookies from 'js-cookie'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -12,6 +13,7 @@ const router = createRouter({
       // this generates a separate chunk (About.[hash].js) for this route
       // which is lazy-loaded when the route is visited.
       component: () => import('../views/ProfilePage.vue'),
+      meta: { requiresAuth: true }
     },
     {
       path: '/',
@@ -25,5 +27,18 @@ const router = createRouter({
     },
   ],
 })
+
+router.beforeEach((to, from, next) => {
+  const isLoggedIn = !!Cookies.get('user_id');
+
+  if (to.meta.requiresAuth && !isLoggedIn) {
+    next({ name: 'login' });
+  } else if ((to.name === 'login' || to.name === 'register') && isLoggedIn) {
+    next({ name: 'profile' });
+  } else {
+    next();
+  }
+});
+
 
 export default router

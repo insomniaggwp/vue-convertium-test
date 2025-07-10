@@ -36,6 +36,10 @@ import { ref, watch, onMounted } from 'vue'
 import AuthLayout from '@/layouts/AuthLayout.vue'
 import { RouterLink } from 'vue-router'
 import ErrorTooltip from '@/components/ErrorTooltip.vue'
+import Cookies from 'js-cookie'
+import { useRouter } from 'vue-router'
+
+const router = useRouter()
 
 const loginFormRef = ref(null)
 const userId = ref('')
@@ -54,7 +58,7 @@ const validateForm = () => {
 // Re-validate on input changes
 watch([userId, password], validateForm)
 
-// Auto-clear error after 5 seconds
+// Auto-clear error after 3 seconds
 watch(error, (newVal) => {
   if (newVal) {
     setTimeout(() => {
@@ -76,9 +80,6 @@ async function handleLogin() {
 
   if (users.length === 0) {
     error.value = 'Your user ID and/or password does not match.';
-    // setTimeout(() => {
-    //   error.value = '';
-    // }, 5000);
     return;
   }
 
@@ -90,8 +91,8 @@ async function handleLogin() {
 
   // ✅ Login success — you can save token, user info, etc.
   localStorage.setItem('user', JSON.stringify(user));
-  alert('login sukses');
-  // router.push('/dashboard')
+  Cookies.set('user_id', user.id, keepLoggedIn.value? { expires: 365 } : undefined);
+  router.push('/profile');
 }
 
 </script>

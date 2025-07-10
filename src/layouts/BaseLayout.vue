@@ -1,6 +1,7 @@
 <script setup>
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
+import Cookies from 'js-cookie'
 
 const router = useRouter()
 const showMenu = ref(false)
@@ -10,7 +11,7 @@ function toggleMenu() {
 }
 
 function handleLogout() {
-  console.log('Logout clicked')
+  Cookies.remove('user_id')
   router.push('/')
 }
 
