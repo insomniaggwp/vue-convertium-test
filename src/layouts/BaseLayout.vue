@@ -14,7 +14,10 @@ function toggleMenu() {
 
 function handleLogout() {
   showMenu.value = false;
+  
   Cookies.remove('user_id')
+  localStorage.removeItem('user');
+
   updateLoginState()
   router.push('/')
 }
@@ -36,7 +39,7 @@ function handleLogout() {
         <button class="close-button" @click="toggleMenu">X</button>
         <RouterLink to="/home" @click="toggleMenu">Home</RouterLink>
         <RouterLink to="/profile" @click="toggleMenu">My Profile</RouterLink>
-        <RouterLink to="/profile" @click="toggleMenu">Edit Profile</RouterLink>
+        <RouterLink to="/edit-profile" @click="toggleMenu">Edit Profile</RouterLink>
         <button class="logout-button" @click="handleLogout">Logout</button>
       </div>
     </transition>

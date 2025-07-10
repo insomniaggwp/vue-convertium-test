@@ -33,15 +33,17 @@
       </p>
     </form>
 
-    <ErrorTooltip :visible="error !== ''" :message="error" />
+    <NotifTooltip :message="notifMsg" :visible="notifMsg !== ''" :type="notifType" />
   </AuthLayout>
 </template>
 
 <script setup>
 import { ref, watch, onMounted } from 'vue'
 import AuthLayout from '@/layouts/AuthLayout.vue'
-import ErrorTooltip from '@/components/ErrorTooltip.vue'
+import NotifTooltip from '@/components/NotifTooltip.vue'
+import { useRouter } from 'vue-router'
 
+const router = useRouter()
 const registerFormRef = ref(null)
 const userId = ref('')
 const password = ref('')
@@ -49,7 +51,8 @@ const confirmPassword = ref('')
 const showPassword = ref(false)
 const showConfirmPassword = ref(false)
 const isFormValid = ref(false)
-const error = ref('')
+const notifMsg = ref('')
+const notifType = ref('')
 
 const validateForm = () => {
   if (registerFormRef.value) {
@@ -61,10 +64,11 @@ const validateForm = () => {
 watch([userId, password, confirmPassword], validateForm)
 
 // Auto-clear error after 3 seconds
-watch(error, (newVal) => {
+watch(notifMsg, (newVal) => {
   if (newVal) {
     setTimeout(() => {
-      error.value = ''
+      notifMsg.value = ''
+      notifType.value = ''
     }, 3000)
   }
 })
@@ -76,10 +80,12 @@ onMounted(() => {
 
 
 async function handleRegister() {
-  error.value = '';
+  notifMsg.value = '';
+  notifType.value = '';
 
   if (password.value !== confirmPassword.value) {
-    error.value = 'Your passwords do not match.';
+    notifMsg.value = 'Your passwords do not match.';
+    notifType.value = 'error';
     return;
   }
 
@@ -88,7 +94,8 @@ async function handleRegister() {
     const existingUsers = await res.json();
 
     if (existingUsers.length > 0) {
-      error.value = 'User ID already exists.';
+      notifMsg.value = 'User ID already exists.';
+      notifType.value = 'error';
       return;
     }
 
@@ -106,15 +113,19 @@ async function handleRegister() {
     });
 
     if (!createRes.ok) {
-      error.value = 'Failed to register user.';
+      notifMsg.value = 'Failed to register user.';
+      notifType.value = 'error';
       return;
     }
 
-    alert('Registration successful!');
-    // router.push('/');
+    notifMsg.value = 'Registration successful!';
+    notifType.value = 'success';
+    
+    router.push('/');
   } catch (err) {
     console.error(err);
-    error.value = 'Something went wrong. Please try again.';
+    notifMsg.value = 'Something went wrong. Please try again.';
+    notifType.value = 'error';
   }
 }
 

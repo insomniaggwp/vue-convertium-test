@@ -27,7 +27,7 @@
       </p>
     </form>
 
-    <ErrorTooltip :visible="error !== ''" :message="error" />
+    <NotifTooltip :message="notifMsg" :visible="notifMsg !== ''" :type="notifType" />
   </AuthLayout>
 </template>
 
@@ -35,7 +35,7 @@
 import { ref, watch, onMounted } from 'vue'
 import AuthLayout from '@/layouts/AuthLayout.vue'
 import { RouterLink } from 'vue-router'
-import ErrorTooltip from '@/components/ErrorTooltip.vue'
+import NotifTooltip from '@/components/NotifTooltip.vue'
 import Cookies from 'js-cookie'
 import { useRouter } from 'vue-router'
 import { useAuth } from '@/composables/auth'
@@ -49,7 +49,8 @@ const password = ref('')
 const showPassword = ref(false)
 const keepLoggedIn = ref(false)
 const isFormValid = ref(false)
-const error = ref('')
+const notifMsg = ref('')
+const notifType = ref('')
 
 const validateForm = () => {
   if (loginFormRef.value) {
@@ -61,10 +62,11 @@ const validateForm = () => {
 watch([userId, password], validateForm)
 
 // Auto-clear error after 3 seconds
-watch(error, (newVal) => {
+watch(notifMsg, (newVal) => {
   if (newVal) {
     setTimeout(() => {
-      error.value = ''
+      notifMsg.value = ''
+      notifType.value = ''
     }, 5000)
   }
 })
@@ -75,19 +77,22 @@ onMounted(() => {
 })
 
 async function handleLogin() {
-  error.value = '';
+  notifMsg.value = '';
+  notifType.value = '';
 
   const res = await fetch(`http://localhost:3000/users?id=${userId.value}`);
   const users = await res.json();
 
   if (users.length === 0) {
-    error.value = 'Your user ID and/or password does not match.';
+    notifMsg.value = 'Your user ID and/or password does not match.';
+    notifType.value = "error"
     return;
   }
 
   const user = users[0];
   if (user.password !== password.value) {
-    error.value = 'Your user ID and/or password does not match.';
+    notifMsg.value = 'Your user ID and/or password does not match.';
+    notifType.value = "error"
     return;
   }
 
@@ -95,6 +100,9 @@ async function handleLogin() {
   localStorage.setItem('user', JSON.stringify(user));
   Cookies.set('user_id', user.id, keepLoggedIn.value? { expires: 365 } : undefined);
   updateLoginState();
+  notifMsg.value = "Login Success"
+  notifType.value = "success"
+
   router.push('/profile');
 }
 
