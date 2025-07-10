@@ -89,7 +89,7 @@ async function handleLogin() {
     return;
   }
 
-  // ✅ Login success — you can save token, user info, etc.
+  // ✅ Login success
   localStorage.setItem('user', JSON.stringify(user));
   Cookies.set('user_id', user.id, keepLoggedIn.value? { expires: 365 } : undefined);
   router.push('/profile');

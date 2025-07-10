@@ -26,7 +26,6 @@
   transition: opacity 0.3s ease;
   font-style: italic;
   box-shadow: 0 2px 6px rgba(0,0,0,0.2);
-  /* animation: slide-up-fade 0.5s ease forwards; */
 }
 
 /* Optional: triangle arrow */
