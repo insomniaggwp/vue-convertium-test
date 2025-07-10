@@ -10,7 +10,7 @@
     "test:unit": "vitest",
     "lint": "eslint . --fix",
     "format": "prettier --write src/",
-    "start": "json-server --watch db/users.json --port 10000"
+    "start": "json-server --watch db/users.json --port 3000 --host 0.0.0.0"
   },
   "dependencies": {
     "js-cookie": "^3.0.5",
