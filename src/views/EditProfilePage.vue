@@ -390,6 +390,7 @@
 import { ref, onMounted, computed, reactive, watch, toRaw } from 'vue'
 import NotifTooltip from '@/components/NotifTooltip.vue'
 import defaultAvatar from '@/assets/avatar.png'
+const baseURL = import.meta.env.VITE_API_BASE_URL;
 
 const user = ref(null)
 const avatarPreview = ref('')
@@ -543,7 +544,7 @@ async function handleSubmit() {
   }
 
   try {
-    const response = await fetch(`http://localhost:3000/users/${user.value.id}`, {
+    const response = await fetch(`${baseURL}/users/${user.value.id}`, {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json'

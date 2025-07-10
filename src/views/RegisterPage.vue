@@ -42,6 +42,7 @@ import { ref, watch, onMounted } from 'vue'
 import AuthLayout from '@/layouts/AuthLayout.vue'
 import NotifTooltip from '@/components/NotifTooltip.vue'
 import { useRouter } from 'vue-router'
+const baseURL = import.meta.env.VITE_API_BASE_URL;
 
 const router = useRouter()
 const registerFormRef = ref(null)
@@ -90,7 +91,7 @@ async function handleRegister() {
   }
 
   try {
-    const res = await fetch(`http://localhost:3000/users?id=${userId.value}`);
+    const res = await fetch(`${baseURL}/users?id=${userId.value}`);
     const existingUsers = await res.json();
 
     if (existingUsers.length > 0) {
@@ -104,7 +105,7 @@ async function handleRegister() {
       password: password.value,
     };
 
-    const createRes = await fetch(`http://localhost:3000/users`, {
+    const createRes = await fetch(`${baseURL}/users`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'

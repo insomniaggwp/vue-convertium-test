@@ -39,6 +39,7 @@ import NotifTooltip from '@/components/NotifTooltip.vue'
 import Cookies from 'js-cookie'
 import { useRouter } from 'vue-router'
 import { useAuth } from '@/composables/auth'
+const baseURL = import.meta.env.VITE_API_BASE_URL;
 
 const { updateLoginState } = useAuth()
 const router = useRouter()
@@ -80,7 +81,7 @@ async function handleLogin() {
   notifMsg.value = '';
   notifType.value = '';
 
-  const res = await fetch(`http://localhost:3000/users?id=${userId.value}`);
+  const res = await fetch(`${baseURL}/users?id=${userId.value}`);
   const users = await res.json();
 
   if (users.length === 0) {
