@@ -1,0 +1,26 @@
+{
+  "users": [
+    {
+      "id": "1",
+      "firstName": "Arif",
+      "lastName": "Hidayat",
+      "password": "admin",
+      "avatar": "",
+      "salutation": "mr",
+      "email": "arifhidayatbiz@gmail.com",
+      "address": "Jl test",
+      "country": "indonesia",
+      "postalCode": "45192",
+      "dob": "1999-01-01",
+      "gender": "male",
+      "martialStatus": "married",
+      "spouseSolution": "ms",
+      "spouseFirtsName": "r",
+      "spouseLastName": "r",
+      "hobbies": "main game",
+      "favoriteSport": "",
+      "preferedMusic": "",
+      "preferedMovie": ""
+    }
+  ]
+}
