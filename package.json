@@ -9,7 +9,8 @@
     "preview": "vite preview",
     "test:unit": "vitest",
     "lint": "eslint . --fix",
-    "format": "prettier --write src/"
+    "format": "prettier --write src/",
+    "start": "json-server --watch db/users.json --port 10000"
   },
   "dependencies": {
     "js-cookie": "^3.0.5",
