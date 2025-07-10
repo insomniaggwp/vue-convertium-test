@@ -24,16 +24,14 @@
 
       <div class="profile-content-wrapper">
         <div class="avatar"></div>
-        <div class="profile-content">
-          <div class="profile-content-body">
-            <div
-              class="field"
-              v-for="(field, idx) in tabContents[activeTab]"
-              :key="idx"
-            >
-              <label>{{ `${field.label}${field.isMandatory ? '*' : ''}` }}</label>
-              <p>{{ field.value || '-' }}</p>
-            </div>
+        <div class="profile-content-card">
+          <div
+            class="field"
+            v-for="(field, idx) in tabContents[activeTab]"
+            :key="idx"
+          >
+            <label>{{ `${field.label}${field.isMandatory ? '*' : ''}` }}</label>
+            <p>{{ field.value || '-' }}</p>
           </div>
         </div>
       </div>
@@ -124,10 +122,15 @@
   background-color: black;
 }
 
-.profile-content {
+.profile-content-card {
   flex: 1;
   display: flex;
   flex-direction: column;
+  background: rgba(255, 255, 255, 0.8);
+  border-radius: 10px;
+  padding: 1.5rem;
+  backdrop-filter: blur(10px); /* Optional: bikin efek "frosted glass" */
+  -webkit-backdrop-filter: blur(10px);
 }
 
 .avatar {
@@ -173,6 +176,16 @@
 }
 
 @media screen and (max-width: 768px) {
+  .profile-content-wrapper {
+    flex-direction: column;
+  }
+
+  .avatar {
+    width: 200px;
+    height: 200px;
+    align-self: center;
+  }
+
   .profile-container {
     flex-direction: column;
   }
@@ -182,14 +195,6 @@
     border: none;
     padding: 0;
     margin-bottom: 1rem;
-  }
-
-  .profile-content {
-    width: 100%;
-    padding: 0;
-    display: flex;
-    justify-content: flex-end;
-    align-items: flex-start;
   }
 
   .edit-button {
